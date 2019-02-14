@@ -176,7 +176,7 @@ class Table extends Component {
       <div className="App">
         <header className="App-header">
           <h1>
-            Challenge 3 - Configurable Table
+            react-table-component
           </h1>
         </header>
         <div className="form-wrapper-table">
