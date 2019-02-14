@@ -1,0 +1,76 @@
+form {
+  padding: 20px 0;
+}
+
+button {
+  all: unset;
+  background: $dark-gray;
+  padding: 5px;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover, button:active, button:focus {
+  background: #555555;
+}
+
+input, textarea {
+  min-width: 80%;
+  margin: 20px;
+  border: 1px solid $dark-gray;
+}
+
+textarea {
+  height: 120px;
+  resize: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.App-header {
+  font-size: 1em;
+  color: $dark-gray;
+  padding: 20px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.link {
+  display: inline-block;
+  color: $dark-gray;
+  padding: 20px;
+  text-decoration: none;
+  background: $light-gray;
+  border-radius: 50px;
+  margin: 20px;
+
+  &:hover, &:active, &:focus {
+    color: $dark-green;
+    background: $light-green;
+  }
+}
+
+.links {
+  .link {
+    width: 300px;
+  }
+}
+
+.home {
+  margin-top: 60px;
+  float: right;
+}
