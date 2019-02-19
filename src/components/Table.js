@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DataForm from './DataForm';
 import debounce from 'lodash.debounce';
 
 class Table extends Component {
@@ -179,22 +180,7 @@ class Table extends Component {
             react-table-component
           </h1>
         </header>
-        <div className="form-wrapper-table">
-          <form>
-            <ul>
-              <li>
-                <span className="clearfix">Table Headers</span>
-                <p>Provide comma separated values with no spaces between values</p>
-                <input id="columnHeaders" name="columnHeaders" onChange={this.handleChange}/>
-              </li>
-              <li>
-                <span className="clearfix">Table Data</span>
-                <p>Provide comma separated values with no spaces between values, rows separated by line breaks</p>
-                <textarea id="rows" name="rows" onChange={this.handleChange}/>
-              </li>
-            </ul>
-          </form>
-        </div>
+        <DataForm handleChange={this.handleChange} />
         <div className="table-wrapper">
           { this.state.columnHeaders.length > 0 || this.state.rows.length > 0 ?
             (
