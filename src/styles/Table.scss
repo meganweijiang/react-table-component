@@ -98,7 +98,7 @@
   }
 }
 
-.show-cols, .filter-button, .clear-filter-button {
+.show-cols, .clear-filter-button {
   border-radius: 10px;
   margin: 2px;
   background: $dark-gray;
@@ -110,11 +110,4 @@
 .show-cols {
   margin-top: 10px;
 }
-
-@media (max-width: 375px) {
-  .filter-button-wrapper {
-    display: block !important;
-  }
-}
-
 
