@@ -15,7 +15,10 @@ class ReactTable extends Component {
       order: '',
       query: '',
       hiddenCols: [],
-      hiddenRows: []
+      hiddenRows: [],
+      color1: '',
+      color2: '',
+      thcolor: ''
     };
   };
 
@@ -74,6 +77,15 @@ class ReactTable extends Component {
   handleChange = (e) => {
     e.persist();
     this.updateTable(e);
+  }
+
+  handleColorChange = (e) => {
+    const prop = e.target.id;
+    let value = e.target.value;
+    if (value[0] !== '#' && !isNaN(parseInt(value[1]))) {
+      value = '#' + value;
+    }
+    this.setState({[prop]: value});
   }
 
   handleFilterChange = (e) => {
@@ -197,11 +209,17 @@ class ReactTable extends Component {
   render() {
     return (
       <div>
-        <DataForm handleChange={this.handleChange} />
+        <DataForm 
+          handleChange={this.handleChange}
+          handleColorChange={this.handleColorChange}
+        />
         <DataTable 
           createTable={this.createTable} 
           columnHeaders={this.state.columnHeaders} 
           rows={this.state.rows} 
+          color1={this.state.color1}
+          color2={this.state.color2}
+          thcolor={this.state.thcolor}
         />
         <ShowColumns 
           handleShowColumns={this.handleShowColumns} 

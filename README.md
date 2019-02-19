@@ -4,7 +4,8 @@ Configurable table component in React
 
 ### Capabilities
 
-1. Sort by column (ascending and descending)
-2. Filter rows by value
-3. Hide columns
-4. Add and update data in real time
+* Add and update data in real time
+* Sort by column (ascending and descending)
+* Filter rows by query
+* Hide and show specific columns
+* Change heading and row colors by input
