@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import DataForm from './DataForm';
+import DataTable from './DataTable';
+import Filter from './Filter';
+import ShowColumns from './ShowColumns';
 import debounce from 'lodash.debounce';
 
-class Table extends Component {
+class ReactTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,17 +36,28 @@ class Table extends Component {
   } 
 
   clearFilter = (e) => {
-    this.setState({ hiddenRows: [], query: '' });
+    this.setState({
+      hiddenRows: [],
+      query: ''
+    });
   }
 
-  // Update values shown by checking against exact query match
+  // Update values shown by checking against query substring match
   updateByQuery = () => {
     const query = this.state.query;
     const currentRows = this.state.rows;
     const noMatch = [];
     for (let i = 0; i < currentRows.length; i++) {
+      let found = false;
+      for (let j = 0; j < currentRows[i].length; j++) {
+        console.log(currentRows[i][j]);
+        if (currentRows[i][j].includes(query)) {
+          found = true;
+          break;
+        }
+      }
       // If there isn't a match in the row, don't show it
-      if (!currentRows[i].includes(query)) {
+      if (found === false) {
         noMatch.push(i);
       }
       // If there is a match but the column is hidden, don't show it
@@ -54,7 +68,7 @@ class Table extends Component {
         }
       }
     }
-    this.setState({ hiddenRows: [ ...noMatch ]})
+    this.setState({hiddenRows: [...noMatch]});
   } 
 
   handleChange = (e) => {
@@ -63,7 +77,11 @@ class Table extends Component {
   }
 
   handleFilterChange = (e) => {
-    this.setState({ query: e.target.value })
+    if (e.target.value === '') {
+      this.clearFilter();
+      return;
+    }
+    this.setState({query: e.target.value}, this.updateByQuery);
   }
 
   // Determine whether we are sorting asc or desc for a specific column
@@ -72,45 +90,49 @@ class Table extends Component {
       this.setState({
         sortedBy: e.target.id,
         order: 'asc'
-      })
+      });
     }
     if (this.state.order === 'asc') {
       if (this.state.sortedBy === e.target.id) {
-        this.setState({ order: 'desc' })
+        this.setState({order: 'desc'});
       }
       else {
-        this.setState({ sortedBy: e.target.id })
+        this.setState({sortedBy: e.target.id});
       }
     }
     if (this.state.order === 'desc') {
       if (this.state.sortedBy === e.target.id) {
-        this.setState({ order: 'asc' })
+        this.setState({order: 'asc'});
       }
       else {
         this.setState({ 
           sortedBy: e.target.id,
           order: 'asc'
-       })
+       });
       }
     }    
   }
 
   handleHideColumn = (e) => {
     const colNum = parseInt(e.target.id.split('-').pop());
-    this.setState({ hiddenCols: [...this.state.hiddenCols, colNum] });      
+    this.setState({hiddenCols: [...this.state.hiddenCols, colNum]});      
   }
 
   handleShowColumns = () => {
-    this.setState({ hiddenCols: [] });      
+    this.setState({hiddenCols: []});      
   }
 
   // Update table values as user is typing. Debounce to stop stack overflow.
   updateTable = debounce((e) => {
     const prop = e.target.id;
+    if (e.target.value === '') {
+      this.setState({[prop]: []});
+      return;
+    }
     if (prop === 'columnHeaders') {
       const array = e.target.value.split(',');
-      this.setState({ [prop]: array })
-      return
+      this.setState({[prop]: array});
+      return;
     }
     if (prop === 'rows') {
       let result = []
@@ -119,10 +141,10 @@ class Table extends Component {
         let rowArray = array[i].split(',');
         result.push(rowArray);
       }
-      this.setState({ [prop]: result })
-      return
+      this.setState({[prop]: result});
+      return;
     }
-    this.setState({ [prop]: e.target.value })
+    this.setState({[prop]: e.target.value});
   }, 200);
 
   // Sorting algorithm
@@ -181,30 +203,24 @@ class Table extends Component {
           </h1>
         </header>
         <DataForm handleChange={this.handleChange} />
-        <div className="table-wrapper">
-          { this.state.columnHeaders.length > 0 || this.state.rows.length > 0 ?
-            (
-              <table><tbody>{this.createTable()}</tbody></table>
-            ) : (
-              <p>Begin entering data and table will display here. Make sure all rows have the same number of records as the number of headers.</p>
-            )
-          }
-        </div>
-          { this.state.hiddenCols.length > 0 && <button className="show-cols clear-fix" onClick={this.handleShowColumns}>Show All Columns</button> }
-          { this.state.rows.length > 0 && 
-            (
-              <div className="filter clear-fix"><span>Filter</span>
-                <input id="filter" name="filter" value={this.state.query} onChange={this.handleFilterChange} />
-                <div className="filter-button-wrapper">
-                  <button className="filter-button" id="submit-filter" type="submit" onClick={this.updateByQuery}>Submit</button>
-                  <button className="clear-filter-button" id="clear-filter" type="reset" onClick={this.clearFilter}>Clear</button>
-                </div>
-              </div>
-            ) 
-          }
+        <DataTable 
+          createTable={this.createTable} 
+          columnHeaders={this.state.columnHeaders} 
+          rows={this.state.rows} 
+        />
+        <ShowColumns 
+          handleShowColumns={this.handleShowColumns} 
+          hiddenCols={this.state.hiddenCols} 
+        />
+        <Filter 
+          handleFilterChange={this.handleFilterChange} 
+          clearFilter={this.clearFilter}
+          query={this.state.query} 
+          rows={this.state.rows}
+        />
       </div>
     );
   }
 }
 
-export default Table;
+export default ReactTable;

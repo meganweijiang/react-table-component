@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import '../styles/styles.scss';
-import Table from './Table';
+import ReactTable from './ReactTable';
 
 class App extends Component {
   render() {
     return (
       <div>
-        <Table />
+        <ReactTable />
       </div>
     );
   }
