@@ -196,12 +196,7 @@ class ReactTable extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1>
-            react-table-component
-          </h1>
-        </header>
+      <div>
         <DataForm handleChange={this.handleChange} />
         <DataTable 
           createTable={this.createTable} 
