@@ -82,7 +82,7 @@ class ReactTable extends Component {
   handleColorChange = (e) => {
     const prop = e.target.id;
     let value = e.target.value;
-    if (value[0] !== '#' && !isNaN(parseInt(value[1]))) {
+    if (value[0] !== '#' && !isNaN(parseInt(value[0]))) {
       value = '#' + value;
     }
     this.setState({[prop]: value});
