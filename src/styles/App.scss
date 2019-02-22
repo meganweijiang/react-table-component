@@ -1,18 +1,23 @@
+h1 {
+  margin: 0;
+}
+
 form {
-  padding: 20px 0;
+  padding: 40px 0;
 }
 
 button {
   all: unset;
-  background: $dark-gray;
+  background: #0066cc;
   padding: 5px;
   color: #ffffff;
   font-size: 16px;
   cursor: pointer;
+  margin: 0 auto;
 }
 
 button:hover, button:active, button:focus {
-  background: #555555;
+  background: #003366;
 }
 
 input, textarea {

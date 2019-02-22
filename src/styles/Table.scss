@@ -79,7 +79,7 @@
 .filter {
   display: block;
   margin: 0 auto;
-  padding: 20px 0px;
+  padding: 20px 0px 0px;
   white-space: nowrap;
 
   span {
@@ -120,3 +120,6 @@
   margin-top: 10px;
 }
 
+.react-table-component {
+  padding: 20px;
+}

@@ -11,7 +11,8 @@ class App extends Component {
       rows: [["Test data 1", "Test data 2", "Test data 3"], ["Test data 4", "Test data 5", "Test data 6"]],
       colorOdd: '',
       colorEven: '',
-      colorHeader: ''
+      colorHeader: '',
+      allowColHide: true
     };
   };
 
@@ -39,6 +40,14 @@ class App extends Component {
     this.setState({[prop]: e.target.value});
   }
 
+  toggleColHide = (e) => {
+    console.log("here");
+    e.preventDefault();
+    this.setState(prevState => ({
+      allowColHide: !prevState.allowColHide
+    }));
+  }
+
   handleColorChange = (e) => {
     const prop = e.target.id;
     let value = e.target.value;
@@ -61,13 +70,15 @@ class App extends Component {
           rows={this.state.rows}
           handleChange={this.handleChange}
           handleColorChange={this.handleColorChange}
+          toggleColHide={this.toggleColHide}
         />
         <ReactTable 
           columnHeaders={this.state.columnHeaders}
           rows={this.state.rows}  
-          colorOdd={this.state.colorOdd}
-          colorEven={this.state.colorEven}
-          colorHeader={this.state.colorHeader}
+          colorOdd={this.state.colorOdd || undefined}
+          colorEven={this.state.colorEven || undefined}
+          colorHeader={this.state.colorHeader || undefined}
+          allowColHide={this.state.allowColHide}
         />
       </div>
     );

@@ -141,8 +141,10 @@ class ReactTable extends Component {
       headers.push(<th key={headerID} className={ this.state.hiddenCols.includes(i) ? 'hide' : null }>
         <button id={headerID} className={ this.state.sortedBy === headerID ? this.state.order : null } 
         onClick={this.handleSort}>{this.props.columnHeaders[i]}</button></th>);
-      headerSub.push(<td key={headerSubID} className={this.state.hiddenCols.includes(i) ? 'hide' : 'subhead'}>
+      if (this.props.allowColHide) {
+        headerSub.push(<td key={headerSubID} className={this.state.hiddenCols.includes(i) ? 'hide' : 'subhead'}>
         <button onClick={this.handleHideColumn} className='subhead-button' id={headerSubID}>Hide Column</button></td>);
+      }
     }
     table.push(<tr key="row0" id="row0">{headers}</tr>);
     table.push(<tr key="row0-sub" id="row0-sub">{headerSub}</tr>);
@@ -189,9 +191,10 @@ class ReactTable extends Component {
 ReactTable.defaultProps = {
   columnHeaders: [],
   rows: [],
-  colorOdd: '',
-  colorEven: '',
-  colorHeader: ''
+  colorOdd: '#ffffff',
+  colorEven: '#e5fcee',
+  colorHeader: '#025b26',
+  allowColHide: true
 };
 
 export default ReactTable;

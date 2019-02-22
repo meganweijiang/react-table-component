@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 const StyledTable = styled.table`
   tr:nth-child(odd) {
-    background-color: ${props => props.colorOdd ? props.colorOdd : "#ffffff"};
+    background-color: ${props => props.colorOdd};
   }
   tr:nth-child(even) {
-    background-color: ${props => props.colorEven ? props.colorEven : "#e5fcee"};
+    background-color: ${props => props.colorEven};
   }
   th {
-    background-color: ${props => props.colorHeader ? props.colorHeader: "#025b26"};
+    background-color: ${props => props.colorHeader};
   }
 `;
 
