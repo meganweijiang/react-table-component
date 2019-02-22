@@ -1,34 +1,27 @@
 import React, { Component } from 'react';
-import DataForm from './DataForm';
 import DataTable from './DataTable';
 import Filter from './Filter';
 import ShowColumns from './ShowColumns';
-import debounce from 'lodash.debounce';
 
 class ReactTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columnHeaders: [],
-      rows: [],
       sortedBy: '',
       order: '',
       query: '',
       hiddenCols: [],
-      hiddenRows: [],
-      color1: '',
-      color2: '',
-      thcolor: ''
-    };
-  };
+      hiddenRows: []
+    }
+  }
 
   componentWillUpdate = (nextProps, nextState) => {
-    this.updateRows(nextState);
+    this.updateRows(nextProps, nextState);
   }
 
   // Update rows based on sorting by asc or desc
-  updateRows = (nextState) => {
-    let rowsCopy = nextState.rows;
+  updateRows = (nextProps, nextState) => {
+    let rowsCopy = nextProps.rows;
     const sortOn = nextState.sortedBy.split('-').pop();
     if (nextState.order === 'asc') {
       this.sortByCol(rowsCopy, sortOn);
@@ -48,7 +41,7 @@ class ReactTable extends Component {
   // Update values shown by checking against query substring match
   updateByQuery = () => {
     const query = this.state.query;
-    const currentRows = this.state.rows;
+    const currentRows = this.props.rows;
     const noMatch = [];
     for (let i = 0; i < currentRows.length; i++) {
       let found = false;
@@ -73,20 +66,6 @@ class ReactTable extends Component {
     }
     this.setState({hiddenRows: [...noMatch]});
   } 
-
-  handleChange = (e) => {
-    e.persist();
-    this.updateTable(e);
-  }
-
-  handleColorChange = (e) => {
-    const prop = e.target.id;
-    let value = e.target.value;
-    if (value[0] !== '#' && !isNaN(parseInt(value[0]))) {
-      value = '#' + value;
-    }
-    this.setState({[prop]: value});
-  }
 
   handleFilterChange = (e) => {
     if (e.target.value === '') {
@@ -134,31 +113,6 @@ class ReactTable extends Component {
     this.setState({hiddenCols: []});      
   }
 
-  // Update table values as user is typing. Debounce to stop stack overflow.
-  updateTable = debounce((e) => {
-    const prop = e.target.id;
-    if (e.target.value === '') {
-      this.setState({[prop]: []});
-      return;
-    }
-    if (prop === 'columnHeaders') {
-      const array = e.target.value.split(',');
-      this.setState({[prop]: array});
-      return;
-    }
-    if (prop === 'rows') {
-      let result = []
-      const array = e.target.value.split('\n');
-      for (let i = 0; i < array.length; i++) {
-        let rowArray = array[i].split(',');
-        result.push(rowArray);
-      }
-      this.setState({[prop]: result});
-      return;
-    }
-    this.setState({[prop]: e.target.value});
-  }, 200);
-
   // Sorting algorithm
   sortByCol = (arr, col) => {
     const sortFunction = (a, b) => {
@@ -181,12 +135,12 @@ class ReactTable extends Component {
     let headerSub = [];
 
     // Create headers and sub headers (hide column buttons)
-    for (let i = 0; i < this.state.columnHeaders.length; i++) {
+    for (let i = 0; i < this.props.columnHeaders.length; i++) {
       let headerID = `header-${i}`;
       let headerSubID = `headersub-${i}`;
       headers.push(<th key={headerID} className={ this.state.hiddenCols.includes(i) ? 'hide' : null }>
         <button id={headerID} className={ this.state.sortedBy === headerID ? this.state.order : null } 
-        onClick={this.handleSort}>{this.state.columnHeaders[i]}</button></th>);
+        onClick={this.handleSort}>{this.props.columnHeaders[i]}</button></th>);
       headerSub.push(<td key={headerSubID} className={this.state.hiddenCols.includes(i) ? 'hide' : 'subhead'}>
         <button onClick={this.handleHideColumn} className='subhead-button' id={headerSubID}>Hide Column</button></td>);
     }
@@ -194,11 +148,11 @@ class ReactTable extends Component {
     table.push(<tr key="row0-sub" id="row0-sub">{headerSub}</tr>);
 
     // Create rows
-    for (let i = 0; i < this.state.rows.length; i++) {
+    for (let i = 0; i < this.props.rows.length; i++) {
       let children = [];
-      for (let j = 0; j < this.state.rows[0].length; j++) {
+      for (let j = 0; j < this.props.rows[0].length; j++) {
         let cellID = `cell${i}-${j}`;
-        children.push(<td key={cellID} className={this.state.hiddenCols.includes(j) ? 'hide' : null } id={cellID}>{this.state.rows[i][j]}</td>);
+        children.push(<td key={cellID} className={this.state.hiddenCols.includes(j) ? 'hide' : null } id={cellID}>{this.props.rows[i][j]}</td>);
       }
       let rowNum = `row${i+1}`;
       table.push(<tr key={rowNum} id={rowNum} className={this.state.hiddenRows.includes(i) ? 'hide' : null }>{children}</tr>);
@@ -208,18 +162,14 @@ class ReactTable extends Component {
 
   render() {
     return (
-      <div>
-        <DataForm 
-          handleChange={this.handleChange}
-          handleColorChange={this.handleColorChange}
-        />
+      <div className="react-table-component">
         <DataTable 
           createTable={this.createTable} 
-          columnHeaders={this.state.columnHeaders} 
-          rows={this.state.rows} 
-          color1={this.state.color1}
-          color2={this.state.color2}
-          thcolor={this.state.thcolor}
+          columnHeaders={this.props.columnHeaders} 
+          rows={this.props.rows} 
+          colorOdd={this.props.colorOdd}
+          colorEven={this.props.colorEven}
+          colorHeader={this.props.colorHeader}
         />
         <ShowColumns 
           handleShowColumns={this.handleShowColumns} 
@@ -229,11 +179,19 @@ class ReactTable extends Component {
           handleFilterChange={this.handleFilterChange} 
           clearFilter={this.clearFilter}
           query={this.state.query} 
-          rows={this.state.rows}
+          rows={this.props.rows}
         />
       </div>
     );
   }
 }
+
+ReactTable.defaultProps = {
+  columnHeaders: [],
+  rows: [],
+  colorOdd: '',
+  colorEven: '',
+  colorHeader: ''
+};
 
 export default ReactTable;

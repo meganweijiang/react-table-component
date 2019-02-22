@@ -17,13 +17,13 @@ const DataForm = (props) => (
       </ul>
       <ul className="table-colors">
         <li>
-          <span>Table heading color</span><input id="thcolor" onChange={props.handleColorChange} />
+          <span>Table heading color</span><input id="colorHeader" onChange={props.handleColorChange} />
         </li>
         <li>
-          <span>Table odd row color</span><input id="color1" onChange={props.handleColorChange} />
+          <span>Table odd row color</span><input id="colorOdd" onChange={props.handleColorChange} />
         </li>
         <li>
-          <span>Table even row color</span><input id="color2" onChange={props.handleColorChange} />
+          <span>Table even row color</span><input id="colorEven" onChange={props.handleColorChange} />
         </li>
       </ul>
     </form>
